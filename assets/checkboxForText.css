@@ -8,5 +8,5 @@
  */
 .addcheckbox-plugin{clear:both} /* Using col set to float : core HTML issue */
 .addcheckbox-plugin label{padding-right:0.1em;padding-left:0.1em;}
-input[type='text'][readonly]{color:#ccc;color: rgba(0, 0, 0, 0);}
-textarea[readonly]{color:#ccc;color: rgba(0, 0, 0, 0);}
+input[type='text'][disabled]{color:#ccc;color: rgba(0, 0, 0, 0);}
+textarea[disabled]{color:#ccc;color: rgba(0, 0, 0, 0);}

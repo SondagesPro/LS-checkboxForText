@@ -8,14 +8,14 @@
 $(document).on('click',':checkbox[data-checkboxfor]',function(){
   if($(this).is(":checked")){
     $(":checkbox[data-checkboxfor][name='"+$(this).attr("name")+"']").not(this).prop('checked',false);
-    $("#"+$(this).attr("data-checkboxfor")).val($(this).val()).trigger("keyup").prop("readonly",true);
+    $("#"+$(this).attr("data-checkboxfor")).val($(this).data('updatevalue')).trigger("keyup").prop("disabled",true);
   }else{
-    $("#"+$(this).attr("data-checkboxfor")).val("").prop("readonly",false);
+    $("#"+$(this).attr("data-checkboxfor")).val("").trigger("keyup").prop("disabled",false);
   }
 });
 /* Set readonly after ready */
 $(function() {
   $(":checkbox[data-checkboxfor]:checked").each(function(){
-    $("#"+$(this).attr("data-checkboxfor")).prop("readonly",true);
+    $("#"+$(this).attr("data-checkboxfor")).prop("disabled",true);
   });
 });

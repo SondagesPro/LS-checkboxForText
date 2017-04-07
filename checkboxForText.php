@@ -6,7 +6,7 @@
  * @copyright 2016-2017 Denis Chenu <http://www.sondages.pro>
  * @copyright 2016-2017 Extract recherche marketing <http://www.extractmarketing.com>
  * @license GPL v3
- * @version 0.3.2
+ * @version 0.4.0
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -171,7 +171,20 @@ class checkboxForText extends \ls\pluginmanager\PluginBase
           "caption"=>$this->gT('Text for label')
         );
       }
+      if(!empty($questionAttributes)) {
+        $questionAttributes['needEmEvent']=array(
+          "types"=>"STUNQK",
+          'category'=>$this->gT('Checkbox'),
+          'sortorder'=>10,
+          'inputtype'=>'switch',
+          'default'=>0,
+          'i18n'=>false,
+          "caption"=>$this->gT('Need to manage expression manager event'),
+          "help"=>$this->gT('If you have condition in same page : you need to chech this.')
+        );
+      }
       $event->append('questionAttributes', $questionAttributes);
+
     }
 
     public function beforeSurveySettings()
@@ -313,7 +326,12 @@ class checkboxForText extends \ls\pluginmanager\PluginBase
         $sLabel=$this->getDefaultLabel($aCheckbox['type']);
       }
 
-      $sHtmlAdd =CHtml::checkBox($sName,$sActualValue==$sValue,array("value"=>$sValue,'id'=>"answer{$sName}_{$aCheckbox['value']}","data-checkboxFor"=>"answer{$sName}"));
+      $sHtmlAdd =CHtml::checkBox($sName,$sActualValue==$sValue,array(
+        "value"=>$sValue,
+        'id'=>"answer{$sName}_{$aCheckbox['value']}",
+        "data-checkboxFor"=>"answer{$sName}",
+        "data-updatevalue"=>$aAttributes['needEmEvent'] ? $sValue:"",
+      ));
       $sHtmlAdd.=CHtml::label($sLabel,"answer{$sName}_{$aCheckbox['value']}");
       $sHtmlAdd=CHtml::tag("div",array("class"=>"checkbox checkbox-item addcheckbox-plugin"),$sHtmlAdd);
       $oEvent->set('answers',$sHtmlAnswers.$sHtmlAdd);
