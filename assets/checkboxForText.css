@@ -1,10 +1,12 @@
 /*!
  * Style fix for checkboxForText
  *
- * Copyright 2016 Denis Chenu <http://www.sondages.pro>
+ * Copyright 2016-2017 Denis Chenu <http://www.sondages.pro>
  * Licensed under the Apache License v2.0
  * http://www.apache.org/licenses/LICENSE-2.0
  *
  */
 .addcheckbox-plugin{clear:both} /* Using col set to float : core HTML issue */
 .addcheckbox-plugin label{padding-right:0.1em;padding-left:0.1em;}
+input[type='text'][readonly]{color:#ccc;color: rgba(0, 0, 0, 0);}
+textarea[readonly]{color:#ccc;color: rgba(0, 0, 0, 0);}

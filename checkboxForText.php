@@ -3,10 +3,10 @@
  * Description
  *
  * @author Denis Chenu <denis@sondages.pro>
- * @copyright 2016 Denis Chenu <http://www.sondages.pro>
- * @copyright 2016 Extract recherche marketing <http://www.extractmarketing.com>
+ * @copyright 2016-2017 Denis Chenu <http://www.sondages.pro>
+ * @copyright 2016-2017 Extract recherche marketing <http://www.extractmarketing.com>
  * @license GPL v3
- * @version 0.3.1
+ * @version 0.3.2
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
