@@ -2,7 +2,7 @@
     "name": "SondagesPro/checkboxForText",
     "description": "Allow you to add a do not know checkbox or do not want checkbox to text input (text and numeric).",
     "type": "limesurvey-plugin",
-    "homepage": "https://gitlab.com/SondagesPro/checkboxForText",
+    "homepage": "https://gitlab.com/SondagesPro/QuestionSettingsType/checkboxForText",
     "license": "AGPL-3.0+",
     "authors": [
         {
