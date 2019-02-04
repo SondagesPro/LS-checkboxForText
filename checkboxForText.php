@@ -6,7 +6,7 @@
  * @copyright 2016-2017 Denis Chenu <http://www.sondages.pro>
  * @copyright 2016-2017 Extract recherche marketing <http://www.extractmarketing.com>
  * @license GPL v3
- * @version 0.4.0
+ * @version 1.0.0
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -18,7 +18,7 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
  */
-class checkboxForText extends \ls\pluginmanager\PluginBase
+class checkboxForText extends PluginBase
 {
     protected $storage = 'DbStorage';
 
@@ -120,67 +120,67 @@ class checkboxForText extends \ls\pluginmanager\PluginBase
       {
         $questionAttributes['notKnowCheckbox']=array(
           "types"=>"STUNQK",
-          'category'=>$this->gT('Checkbox'),
+          'category'=>$this->_translate('Checkbox'),
           'sortorder'=>1,
           'inputtype'=>'singleselect',
           'options'=>array(
-              'D'=>$this->gT('Default from survey'),
+              'D'=>$this->_translate('Default from survey'),
               'N'=>gT('No'),
               'Y'=>gT('Yes'),
           ),
           'default'=>'D',
-          "help"=>sprintf($this->gT("Show the %s checkbox (with default label set)."),$notKnowCheckboxValue),
-          "caption"=>sprintf($this->gT('Show the %s checkbox'),$notKnowCheckboxValue)
+          "help"=>sprintf($this->_translate("Show the %s checkbox (with default label set)."),$notKnowCheckboxValue),
+          "caption"=>sprintf($this->_translate('Show the %s checkbox'),$notKnowCheckboxValue)
         );
         $questionAttributes['notKnowCheckboxLabel']=array(
           "types"=>"STUNQK",
-          'category'=>$this->gT('Checkbox'),
+          'category'=>$this->_translate('Checkbox'),
           'sortorder'=>2,
           'inputtype'=>'text',
           'default'=>'',
           'i18n'=>true,
-          "help"=>$this->gT('String for this language (by default from survey settings)'),
-          "caption"=>$this->gT('Text for label')
+          "help"=>$this->_translate('String for this language (by default from survey settings)'),
+          "caption"=>$this->_translate('Text for label')
         );
       }
       if($notWantCheckboxValue=$this->get('notWantCheckbox',null,null,$this->settings['notWantCheckbox']['default']))
       {
         $questionAttributes['notWantCheckbox']=array(
           "types"=>"STUNQK",
-          'category'=>$this->gT('Checkbox'),
+          'category'=>$this->_translate('Checkbox'),
           'sortorder'=>3,
           'inputtype'=>'singleselect',
           'options'=>array(
-              'D'=>$this->gT('Default from survey'),
+              'D'=>$this->_translate('Default from survey'),
               'N'=>gT('No'),
               'Y'=>gT('Yes'),
           ),
           'default'=>'D',
-          "help"=>sprintf($this->gT("Show the %s checkbox (with default label set)."),$notWantCheckboxValue),
-          "caption"=>sprintf($this->gT('Show the %s checkbox'),$notWantCheckboxValue)
+          "help"=>sprintf($this->_translate("Show the %s checkbox (with default label set)."),$notWantCheckboxValue),
+          "caption"=>sprintf($this->_translate('Show the %s checkbox'),$notWantCheckboxValue)
         );
 
         $questionAttributes['notWantCheckboxLabel']=array(
           "types"=>"STUNQK",
-          'category'=>$this->gT('Checkbox'),
+          'category'=>$this->_translate('Checkbox'),
           'sortorder'=>4,
           'inputtype'=>'text',
           'default'=>'',
           'i18n'=>true,
-          "help"=>$this->gT('String for this language (by default from survey settings)'),
-          "caption"=>$this->gT('Text for label')
+          "help"=>$this->_translate('String for this language (by default from survey settings)'),
+          "caption"=>$this->_translate('Text for label')
         );
       }
       if(!empty($questionAttributes)) {
         $questionAttributes['needEmEvent']=array(
           "types"=>"STUNQK",
-          'category'=>$this->gT('Checkbox'),
+          'category'=>$this->_translate('Checkbox'),
           'sortorder'=>10,
           'inputtype'=>'switch',
           'default'=>0,
           'i18n'=>false,
-          "caption"=>$this->gT('Need to manage expression manager event'),
-          "help"=>$this->gT('If you have condition in same page : you need to chech this.')
+          "caption"=>$this->_translate('Need to manage expression manager event'),
+          "help"=>$this->_translate('If you have condition in same page : you need to chech this.')
         );
       }
       $event->append('questionAttributes', $questionAttributes);
@@ -198,10 +198,10 @@ class checkboxForText extends \ls\pluginmanager\PluginBase
       {
         $newSettings['notKnowCheckboxActive']=array(
           'type'=>'select',
-          'label'=>sprintf($this->gT('Activate %s checkbox (by default)'),$notKnowCheckboxValue),
+          'label'=>sprintf($this->_translate('Activate %s checkbox (by default)'),$notKnowCheckboxValue),
           'options'=>array(
             'Y'=>gT('Yes'),
-            'M'=>$this->gT('On mandatory question'),
+            'M'=>$this->_translate('On mandatory question'),
             'N'=>gT('No'),
           ),
           'current'=>$this->get('notKnowCheckboxActive','Survey',$oEvent->get('survey'),'M'),
@@ -211,7 +211,7 @@ class checkboxForText extends \ls\pluginmanager\PluginBase
           $sCurrent=$this->get('notKnowCheckboxLabel_'.$sLang,'Survey',$oEvent->get('survey'),"");
           $newSettings['notKnowCheckboxLabel_'.$sLang]=array(
             'type'=>'string',
-            'label'=>sprintf($this->gT('%s label for %s checkbox'),$sLang,$notKnowCheckboxValue),
+            'label'=>sprintf($this->_translate('%s label for %s checkbox'),$sLang,$notKnowCheckboxValue),
             'htmlOptions'=>array(
               'class'=>'form-control'
             ),
@@ -224,10 +224,10 @@ class checkboxForText extends \ls\pluginmanager\PluginBase
       {
         $newSettings['notWantCheckboxActive']=array(
           'type'=>'select',
-          'label'=>sprintf($this->gT('Activate %s checkbox (by default)'),$notWantCheckboxValue),
+          'label'=>sprintf($this->_translate('Activate %s checkbox (by default)'),$notWantCheckboxValue),
           'options'=>array(
             'Y'=>gT('Yes'),
-            'M'=>$this->gT('On mandatory question'),
+            'M'=>$this->_translate('On mandatory question'),
             'N'=>gT('No'),
           ),
           'current'=>$this->get('notWantCheckboxActive','Survey',$oEvent->get('survey'),'M'),
@@ -237,7 +237,7 @@ class checkboxForText extends \ls\pluginmanager\PluginBase
         {
           $newSettings['notWantCheckboxLabel_'.$sLang]=array(
             'type'=>'string',
-            'label'=>sprintf($this->gT('%s label for %s checkbox'),$sLang,$notWantCheckboxValue),
+            'label'=>sprintf($this->_translate('%s label for %s checkbox'),$sLang,$notWantCheckboxValue),
             'htmlOptions'=>array(
               'class'=>'form-control'
             ),
@@ -422,7 +422,7 @@ class checkboxForText extends \ls\pluginmanager\PluginBase
       App()->clientScript->registerScriptFile($assetUrl.'/checkboxForText.js');
     }
 
-    private function gT($string)
+    private function _translate($string)
     {
       if(isset($this->translation[$string][Yii::app()->language]))
       {
