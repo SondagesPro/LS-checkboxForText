@@ -3,10 +3,10 @@
  * Description
  *
  * @author Denis Chenu <denis@sondages.pro>
- * @copyright 2016-2017 Denis Chenu <http://www.sondages.pro>
+ * @copyright 2016-2019 Denis Chenu <http://www.sondages.pro>
  * @copyright 2016-2017 Extract recherche marketing <http://www.extractmarketing.com>
  * @license GPL v3
- * @version 1.0.0
+ * @version 2.0.0
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -283,6 +283,7 @@ class checkboxForText extends PluginBase
             || ($aAttributes['not'.$aCheckbox['type'].'Checkbox']=="D" && $sSurveySetting=="M" && $bIsMandatory )
             )
           {
+            $this->getEvent()->set('class',$this->getEvent()->get('class')." text-checkboxfortext");
             if(in_array($oEvent->get('type'),array("S","T","U","N")))
             {
               $this->updateSingleAnswer($aCheckbox);
@@ -332,8 +333,8 @@ class checkboxForText extends PluginBase
         "data-checkboxFor"=>"answer{$sName}",
         "data-updatevalue"=>$aAttributes['needEmEvent'] ? $sValue:"",
       ));
-      $sHtmlAdd.=CHtml::label($sLabel,"answer{$sName}_{$aCheckbox['value']}");
-      $sHtmlAdd=CHtml::tag("div",array("class"=>"checkbox checkbox-item addcheckbox-plugin"),$sHtmlAdd);
+      $sHtmlAdd.=CHtml::label($sLabel,"answer{$sName}_{$aCheckbox['value']}",array('class'=>"checkbox-label control-label"));
+      $sHtmlAdd=CHtml::tag("div",array("class"=>"addedcheckbox-item addcheckbox-plugin"),$sHtmlAdd);
       $oEvent->set('answers',$sHtmlAnswers.$sHtmlAdd);
     }
 
@@ -381,7 +382,7 @@ class checkboxForText extends PluginBase
             $isChecked=false;
           }
           $newWrapper=$domAnswers->createElement("div");
-          $newWrapper->setAttribute("class",'checkbox checkbox-item addcheckbox-plugin');
+          $newWrapper->setAttribute("class",'addedcheckbox-item addcheckbox-plugin');
           $newInput=$domAnswers->createElement("input");
           $newInput->setAttribute("type",'checkbox');
           $newInput->setAttribute("name",$sName);
@@ -395,6 +396,7 @@ class checkboxForText extends PluginBase
           $newWrapper->appendChild($newInput);
           $newLabel=$domAnswers->createElement("label",$sLabel);
           $newLabel->setAttribute("for","answer{$sName}_{$sValue}");
+          $newLabel->setAttribute("class","checkbox-label control-label");
           $newWrapper->appendChild($newLabel);
           $input->parentNode->appendChild($newWrapper);
         }
