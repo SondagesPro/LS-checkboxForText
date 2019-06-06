@@ -6,7 +6,7 @@
  * @copyright 2016-2019 Denis Chenu <http://www.sondages.pro>
  * @copyright 2016-2017 Extract recherche marketing <http://www.extractmarketing.com>
  * @license GPL v3
- * @version 2.0.0
+ * @version 2.1.0
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -46,6 +46,20 @@ class checkboxForText extends PluginBase
    * @Todo Move this to the constructor
    */
   protected $settings=array(
+      "notKnowCheckboxTitle"=>array(
+        'type' => 'info',
+        'content' => "<div class='h4'>Not know checkbox settings</div>",
+      ),
+      "notKnowCheckboxActive"=>array(
+        "type"=>'select',
+        'label'=>'Activate by default',
+        'default' => 'M',
+        'options'=>array(
+          'Y'=>'Yes',
+          'M'=>'On mandatory question',
+          'N'=>'No',
+        ),
+      ),
       "notKnowCheckbox"=>array(
         "type"=>'string',
         'label'=>'Value to set for 1st checkbox',
@@ -62,6 +76,20 @@ class checkboxForText extends PluginBase
         'help'=>"Do not know for example",
       ),
 
+      "notWantCheckboxTitle"=>array(
+        'type' => 'info',
+        'content' => "<div class='h4'>Not want checkbox settings</div>",
+      ),
+      "notWantCheckboxActive"=>array(
+        "type"=>'select',
+        'label'=>'Activate by default',
+        'default' => 'N',
+        'options'=>array(
+          'Y'=>'Yes',
+          'M'=>'On mandatory question',
+          'N'=>'No',
+        ),
+      ),
       "notWantCheckbox"=>array(
         "type"=>'string',
         'label'=>'Value to set for 2nd checkbox',
@@ -114,12 +142,16 @@ class checkboxForText extends PluginBase
     public function noCheckboxAttribute()
     {
       $event = $this->getEvent();
-
+      if(intval(App()->getConfig('versionnumber'))< 3) {
+        $questionType = "STUNQK";
+      } else {
+        $questionType = "STUN";
+      }
       $questionAttributes = array();
       if($notKnowCheckboxValue=$this->get('notKnowCheckbox',null,null,$this->settings['notKnowCheckbox']['default']))
       {
         $questionAttributes['notKnowCheckbox']=array(
-          "types"=>"STUNQK",
+          "types"=>$questionType,
           'category'=>$this->_translate('Checkbox'),
           'sortorder'=>1,
           'inputtype'=>'singleselect',
@@ -133,7 +165,7 @@ class checkboxForText extends PluginBase
           "caption"=>sprintf($this->_translate('Show the %s checkbox'),$notKnowCheckboxValue)
         );
         $questionAttributes['notKnowCheckboxLabel']=array(
-          "types"=>"STUNQK",
+          "types"=>$questionType,
           'category'=>$this->_translate('Checkbox'),
           'sortorder'=>2,
           'inputtype'=>'text',
@@ -146,7 +178,7 @@ class checkboxForText extends PluginBase
       if($notWantCheckboxValue=$this->get('notWantCheckbox',null,null,$this->settings['notWantCheckbox']['default']))
       {
         $questionAttributes['notWantCheckbox']=array(
-          "types"=>"STUNQK",
+          "types"=>"STUN",//"QK",
           'category'=>$this->_translate('Checkbox'),
           'sortorder'=>3,
           'inputtype'=>'singleselect',
@@ -161,7 +193,7 @@ class checkboxForText extends PluginBase
         );
 
         $questionAttributes['notWantCheckboxLabel']=array(
-          "types"=>"STUNQK",
+          "types"=>"STUN",//"QK",
           'category'=>$this->_translate('Checkbox'),
           'sortorder'=>4,
           'inputtype'=>'text',
@@ -204,7 +236,10 @@ class checkboxForText extends PluginBase
             'M'=>$this->_translate('On mandatory question'),
             'N'=>gT('No'),
           ),
-          'current'=>$this->get('notKnowCheckboxActive','Survey',$oEvent->get('survey'),'M'),
+          'htmlOptions' => array(
+            'empty'=> sprintf($this->_translate('Leave default (%s)'),$this->get('notKnowCheckboxActive',null,null,$this->settings['notKnowCheckboxActive']['default'])),
+          ),
+          'current'=>$this->get('notKnowCheckboxActive','Survey',$oEvent->get('survey'),''),
         );
         foreach($aLang as $sLang)
         {
@@ -229,6 +264,9 @@ class checkboxForText extends PluginBase
             'Y'=>gT('Yes'),
             'M'=>$this->_translate('On mandatory question'),
             'N'=>gT('No'),
+          ),
+          'htmlOptions' => array(
+            'empty'=> sprintf($this->_translate('Leave default (%s)'),$this->get('notWantCheckboxActive',null,null,$this->settings['notWantCheckboxActive']['default'])),
           ),
           'current'=>$this->get('notWantCheckboxActive','Survey',$oEvent->get('survey'),'M'),
         );
@@ -270,13 +308,12 @@ class checkboxForText extends PluginBase
 
       if(in_array($oEvent->get('type'),array("S","T","U","N","Q","K")))
       {
-
         $aAttributes=QuestionAttribute::model()->getQuestionAttributes($oEvent->get('qid'));
         $oQuestion=Question::model()->find("qid=:qid and language=:language", array(":qid"=>$oEvent->get('qid'),":language"=>App()->language));
         $bIsMandatory=$oQuestion->mandatory=="Y";
         foreach($this->aExistingCheckbox as $aCheckbox)
         {
-          $sSurveySetting=$this->get('not'.$aCheckbox['type'].'CheckboxActive','Survey',$oEvent->get('surveyId'),'M');
+          $sSurveySetting=$this->_getSurveySetting($oEvent->get('surveyId'),'not'.$aCheckbox['type'].'CheckboxActive');
           if(
             $aAttributes['not'.$aCheckbox['type'].'Checkbox']=="Y"
             || ($aAttributes['not'.$aCheckbox['type'].'Checkbox']=="D" && $sSurveySetting=="Y")
@@ -286,11 +323,19 @@ class checkboxForText extends PluginBase
             $this->getEvent()->set('class',$this->getEvent()->get('class')." text-checkboxfortext");
             if(in_array($oEvent->get('type'),array("S","T","U","N")))
             {
-              $this->updateSingleAnswer($aCheckbox);
+              if(intval(App()->getConfig('versionnumber'))< 3) {
+                $this->_updateSingleAnswer_2($aCheckbox);
+              } else {
+                $this->_updateSingleAnswer($aCheckbox);
+              }
             }
             elseif(in_array($oEvent->get('type'),array("Q","K")))
             {
-              $this->updateMultipleAnswer($aCheckbox);
+              if(intval(App()->getConfig('versionnumber'))< 3) {
+                $this->_updateMultipleAnswer_2($aCheckbox);
+              } else {
+                $this->_updateMultipleAnswer($aCheckbox);
+              }
             }
             $this->registerStyleScript();
           }
@@ -299,7 +344,7 @@ class checkboxForText extends PluginBase
       }
     }
 
-    private function updateSingleAnswer($aCheckbox)
+    private function _updateSingleAnswer_2($aCheckbox)
     {
       $oEvent=$this->getEvent();
       $sName="{$oEvent->get('surveyId')}X{$oEvent->get('gid')}X{$oEvent->get('qid')}";
@@ -338,7 +383,7 @@ class checkboxForText extends PluginBase
       $oEvent->set('answers',$sHtmlAnswers.$sHtmlAdd);
     }
 
-    private function updateMultipleAnswer($aCheckbox,$sLabel="")
+    private function _updateMultipleAnswer_2($aCheckbox,$sLabel="")
     {
       $oEvent=$this->getEvent();
       $sBaseName="{$oEvent->get('surveyId')}X{$oEvent->get('gid')}X{$oEvent->get('qid')}";
@@ -404,6 +449,17 @@ class checkboxForText extends PluginBase
       }
       $oEvent->set('answers',$domAnswers->saveHTMLExact());
     }
+
+    private function _updateSingleAnswer($aCheckbox)
+    {
+        $this->_updateSingleAnswer_2($aCheckbox);
+    }
+
+    private function _updateMultipleAnswer($aCheckbox)
+    {
+
+    }
+
     private function getDefaultLabel($type)
     {
       $sLabel=$this->get('not'.$type.'CheckboxLabel_'.App()->getLanguage(),'Survey',$this->getEvent()->get('surveyId'));
@@ -424,6 +480,21 @@ class checkboxForText extends PluginBase
       App()->clientScript->registerScriptFile($assetUrl.'/checkboxForText.js');
     }
 
+    /**
+     * Get the current setting for a survey
+     * @param $surveyid
+     * @param string $setting name
+     * @return mixed
+     */
+    private function _getSurveySetting($surveyId,$setting)
+    {
+      $value = $this->get($setting,'Survey',$surveyId);
+      if(empty($value)) {
+        $default = isset($this->settings[$setting]['default']) ? $this->settings[$setting]['default'] : null;
+        return $this->get($setting,null,null,$this->settings[$setting]['default']);
+      }
+      return $value;
+    }
     private function _translate($string)
     {
       if(isset($this->translation[$string][Yii::app()->language]))
