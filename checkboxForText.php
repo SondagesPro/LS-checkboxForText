@@ -6,7 +6,7 @@
  * @copyright 2016-2019 Denis Chenu <http://www.sondages.pro>
  * @copyright 2016-2017 Extract recherche marketing <http://www.extractmarketing.com>
  * @license GPL v3
- * @version 2.1.0
+ * @version 2.1.1
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -314,11 +314,11 @@ class checkboxForText extends PluginBase
         foreach($this->aExistingCheckbox as $aCheckbox)
         {
           $sSurveySetting=$this->_getSurveySetting($oEvent->get('surveyId'),'not'.$aCheckbox['type'].'CheckboxActive');
-          if(
+          if( !empty($aAttributes['not'.$aCheckbox['type'].'Checkbox']) && (
             $aAttributes['not'.$aCheckbox['type'].'Checkbox']=="Y"
             || ($aAttributes['not'.$aCheckbox['type'].'Checkbox']=="D" && $sSurveySetting=="Y")
             || ($aAttributes['not'.$aCheckbox['type'].'Checkbox']=="D" && $sSurveySetting=="M" && $bIsMandatory )
-            )
+            ))
           {
             $this->getEvent()->set('class',$this->getEvent()->get('class')." text-checkboxfortext");
             if(in_array($oEvent->get('type'),array("S","T","U","N")))
