@@ -12,6 +12,7 @@ $(document).on('click',':checkbox[data-checkboxfor]',function(){
   }else{
     $("#"+$(this).attr("data-checkboxfor")).val("").trigger("keyup").prop("disabled",false);
   }
+  $("#"+$(this).attr("data-checkboxfor")+"_datetimepicker.date-timepicker-group").trigger("dp.change");
 });
 /* Set readonly after ready */
 $(function() {
