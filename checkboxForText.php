@@ -70,6 +70,11 @@ class checkboxForText extends PluginBase
         'label'=>'Value to set for 1st checkbox for numeric question type',
         'default'=>'999',
       ),
+      "notKnowCheckboxDate"=>array(
+        "type"=>'string',
+        'label'=>'Value to set for 1st checkbox for date/time question type',
+        'default'=>'1970-01-01 00:00:00',
+      ),
       "notKnowCheckboxLabel"=>array(
         "type"=>'string',
         'label'=>'Default label for 1st checkbox',
@@ -99,6 +104,11 @@ class checkboxForText extends PluginBase
         "type"=>'float',
         'label'=>'Value to set for 2nd checkbox for numeric question type',
         'default'=>'998',
+      ),
+      "notWantCheckboxDate"=>array(
+        "type"=>'string',
+        'label'=>'Value to set for 2nd checkbox for date/time question type',
+        'default'=>'1971-02-02 01:01:01',
       ),
       "notWantCheckboxLabel"=>array(
         "type"=>'string',
@@ -143,9 +153,9 @@ class checkboxForText extends PluginBase
     {
       $event = $this->getEvent();
       if(intval(App()->getConfig('versionnumber'))< 3) {
-        $questionType = "STUNQK";
+        $questionType = "STUNDQK";
       } else {
-        $questionType = "STUN";
+        $questionType = "STUND";
       }
       $questionAttributes = array();
       if($notKnowCheckboxValue=$this->get('notKnowCheckbox',null,null,$this->settings['notKnowCheckbox']['default']))
@@ -178,7 +188,7 @@ class checkboxForText extends PluginBase
       if($notWantCheckboxValue=$this->get('notWantCheckbox',null,null,$this->settings['notWantCheckbox']['default']))
       {
         $questionAttributes['notWantCheckbox']=array(
-          "types"=>"STUN",//"QK",
+          "types"=>"STUND",//"QK",
           'category'=>$this->_translate('Checkbox'),
           'sortorder'=>3,
           'inputtype'=>'singleselect',
@@ -193,7 +203,7 @@ class checkboxForText extends PluginBase
         );
 
         $questionAttributes['notWantCheckboxLabel']=array(
-          "types"=>"STUN",//"QK",
+          "types"=>"STUND",//"QK",
           'category'=>$this->_translate('Checkbox'),
           'sortorder'=>4,
           'inputtype'=>'text',
@@ -205,7 +215,7 @@ class checkboxForText extends PluginBase
       }
       if(!empty($questionAttributes)) {
         $questionAttributes['needEmEvent']=array(
-          "types"=>"STUNQK",
+          "types"=>"STUNDQK",
           'category'=>$this->_translate('Checkbox'),
           'sortorder'=>10,
           'inputtype'=>'switch',
@@ -306,7 +316,7 @@ class checkboxForText extends PluginBase
     {
       $oEvent=$this->getEvent();
 
-      if(in_array($oEvent->get('type'),array("S","T","U","N","Q","K")))
+      if(in_array($oEvent->get('type'),array("S","T","U","N","D","Q","K")))
       {
         $aAttributes=QuestionAttribute::model()->getQuestionAttributes($oEvent->get('qid'));
         $oQuestion=Question::model()->find("qid=:qid and language=:language", array(":qid"=>$oEvent->get('qid'),":language"=>App()->language));
@@ -321,7 +331,7 @@ class checkboxForText extends PluginBase
             ))
           {
             $this->getEvent()->set('class',$this->getEvent()->get('class')." text-checkboxfortext");
-            if(in_array($oEvent->get('type'),array("S","T","U","N")))
+            if(in_array($oEvent->get('type'),array("S","T","U","N","D")))
             {
               if(intval(App()->getConfig('versionnumber'))< 3) {
                 $this->_updateSingleAnswer_2($aCheckbox);
@@ -351,6 +361,13 @@ class checkboxForText extends PluginBase
       if($oEvent->get('type')=="N")
       {
         $sValue=floatval($this->get('not'.$aCheckbox['type'].'CheckboxNumeric',null,null,$this->settings['not'.$aCheckbox['type'].'CheckboxNumeric']['default']));
+      }
+      elseif($oEvent->get('type')=="D")
+      {
+        $aAttributes=QuestionAttribute::model()->getQuestionAttributes($oEvent->get('qid'));
+        $aDateFormatData=getDateFormatDataForQID($aAttributes,$oEvent->get('surveyId'));
+        $oDate=DateTime::createFromFormat("Y-m-d h:i:s", $this->get('not'.$aCheckbox['type'].'CheckboxDate',null,null,$this->settings['not'.$aCheckbox['type'].'CheckboxDate']['default']));
+        $sValue=$oDate->format($aDateFormatData['phpdate']);
       }
       else
       {
