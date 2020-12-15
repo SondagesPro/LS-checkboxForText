@@ -3,10 +3,10 @@
  * Description
  *
  * @author Denis Chenu <denis@sondages.pro>
- * @copyright 2016-2019 Denis Chenu <http://www.sondages.pro>
+ * @copyright 2016-2020 Denis Chenu <http://www.sondages.pro>
  * @copyright 2016-2017 Extract recherche marketing <http://www.extractmarketing.com>
  * @license GPL v3
- * @version 2.1.1
+ * @version 2.1.2
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -134,6 +134,9 @@ class checkboxForText extends PluginBase
      */
     public function beforeActivate()
     {
+        if (!$this->getEvent()) {
+            throw new CHttpException(403);
+        }
         $oToolsSmartDomDocument = Plugin::model()->find("name=:name",array(":name"=>'toolsDomDocument'));
         if(!$oToolsSmartDomDocument)
         {
@@ -151,6 +154,10 @@ class checkboxForText extends PluginBase
      */
     public function noCheckboxAttribute()
     {
+      if (!$this->getEvent()) {
+          throw new CHttpException(403);
+      }
+
       $event = $this->getEvent();
       if(intval(App()->getConfig('versionnumber'))< 3) {
         $questionType = "STUNDQK";
@@ -231,6 +238,10 @@ class checkboxForText extends PluginBase
 
     public function beforeSurveySettings()
     {
+      if (!$this->getEvent()) {
+          throw new CHttpException(403);
+      }
+
       $oEvent = $this->event;
       $newSettings=array();
       $oSurvey=Survey::model()->findByPk($oEvent->get('survey'));
@@ -304,6 +315,10 @@ class checkboxForText extends PluginBase
 
     public function newSurveySettings()
     {
+        if (!$this->getEvent()) {
+            throw new CHttpException(403);
+        }
+
         $event = $this->event;
         foreach ($event->get('settings') as $name => $value)
         {
@@ -314,6 +329,10 @@ class checkboxForText extends PluginBase
 
     public function addNoCheckbox()
     {
+      if (!$this->getEvent()) {
+          throw new CHttpException(403);
+      }
+
       $oEvent=$this->getEvent();
 
       if(in_array($oEvent->get('type'),array("S","T","U","N","D","Q","K")))
