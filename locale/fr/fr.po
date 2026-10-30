@@ -1,0 +1,83 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: \n"
+"POT-Creation-Date: 2019-02-04 15:45-0500\n"
+"PO-Revision-Date: 2019-02-04 15:45-0500\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"Language: fr\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Poedit 2.2.1\n"
+"X-Poedit-Basepath: ../..\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"X-Poedit-KeywordsList: gT\n"
+"X-Poedit-SearchPath-0: checkboxForText.php\n"
+
+#: checkboxForText.php:92
+msgid "You must download toolsSmartDomDocument plugin"
+msgstr "Vous devez télécharger le plugin toolsSmartDomDocument"
+
+#: checkboxForText.php:95
+msgid "You must activate toolsSmartDomDocument plugin"
+msgstr "Vous devez activer le plugin toolsSmartDomDocument"
+
+#: checkboxForText.php:111 checkboxForText.php:125 checkboxForText.php:137
+#: checkboxForText.php:152 checkboxForText.php:164
+msgid "Checkbox"
+msgstr "Case à cocher"
+
+#: checkboxForText.php:115 checkboxForText.php:141
+msgid "Default from survey"
+msgstr "Par défaut selon le questionnaire"
+
+#: checkboxForText.php:116 checkboxForText.php:142 checkboxForText.php:191
+#: checkboxForText.php:215
+msgid "No"
+msgstr ""
+
+#: checkboxForText.php:117 checkboxForText.php:143 checkboxForText.php:189
+#: checkboxForText.php:213
+msgid "Yes"
+msgstr ""
+
+#: checkboxForText.php:120 checkboxForText.php:146
+#, php-format
+msgid "Show the %s checkbox (with default label set)."
+msgstr "Montre la case %s (avec le label par défaut)"
+
+#: checkboxForText.php:121 checkboxForText.php:147
+#, php-format
+msgid "Show the %s checkbox"
+msgstr "Montre la case à cocher %s"
+
+#: checkboxForText.php:130 checkboxForText.php:157
+msgid "String for this language (by default from survey settings)"
+msgstr "Texte pour cette langue (si vide celle des paramètres du questionnaire)"
+
+#: checkboxForText.php:131 checkboxForText.php:158
+msgid "Text for label"
+msgstr "Texte pour le label"
+
+#: checkboxForText.php:169
+msgid "Need to manage expression manager event?"
+msgstr "Besoin de gérer un événement du gestionnaire d'expression?"
+
+#: checkboxForText.php:170
+msgid "If you have condition in same page : you need to check this."
+msgstr "Si vous avez une condition dans la même page, vous devez activer cette option."
+
+#: checkboxForText.php:187 checkboxForText.php:211
+#, php-format
+msgid "Activate %s checkbox (by default)"
+msgstr "Activer la case %s (par défaut)"
+
+#: checkboxForText.php:190 checkboxForText.php:214
+msgid "On mandatory question"
+msgstr "Sur les questions obligatoires"
+
+#: checkboxForText.php:199 checkboxForText.php:223
+#, php-format
+msgid "%s label for %s checkbox"
+msgstr "Label %s pour la case %s"
